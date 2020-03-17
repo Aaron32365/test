@@ -1,4 +1,4 @@
-
+const db = require("../../../db/db.json")
 const express = require("express");
 const path = require("path");
 const fs = require('fs')
@@ -27,8 +27,37 @@ app.get("/api/notes", function(req, res){
   return res.sendFile(path.join(__dirname,"../../../db/db.json"))
 })
 
+app.get("/api/notes/:noteid", function(req, res){
+  var chosen = req.params.noteid;
+  console.log(chosen);
+  for (let i = 0; i < db.length; i++) {
+    if (chosen === db[i].id) {
+      return res.json(db[i]);
+    }else 
+      return res.json(false);
+  }
+})
+
 app.post("/api/notes", function(req, res){
-  
+  var newNote = req.body
+  newNote.id = newNote.title.replace(/\s+/g, "").toLowerCase();
+  fs.readFile(path.join(__dirname,"../../../db/db.json"), function (err, data) {
+    if(err) throw(err)
+      var notes = JSON.parse(data)
+      console.log(notes)
+      notes.push(newNote)
+      fs.writeFile(path.join(__dirname,"../../../db/db.json"), JSON.stringify(notes), (err) => { if(err) throw(err)})
+  })
+})
+
+app.delete("/api/notes/:id", function(req, res){
+  var id = req.params.id
+  for(let i = 0; i < db.length; i++) {
+    if(id === db[i].id){
+      delete db[i]
+      console.log(id + " deleted")
+    }
+  }
 })
 
 app.listen(PORT, function() {

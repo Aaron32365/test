@@ -16,8 +16,8 @@ var getNotes = function() {
 };
 
 // A function for saving a note to the db
-var saveNote = function(note) {
-  return $.ajax({
+var saveNote = async function(note) {
+  return await $.ajax({
     url: "/api/notes",
     data: note,
     method: "POST"
@@ -70,7 +70,8 @@ var handleNoteDelete = function(event) {
   var note = $(this)
     .parent(".list-group-item")
     .data();
-
+    
+    console.log(note)
   if (activeNote.id === note.id) {
     activeNote = {};
   }
