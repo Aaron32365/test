@@ -27,11 +27,11 @@ app.get("/api/notes", function(req, res){
   return res.sendFile(path.join(__dirname,"../../../db/db.json"))
 })
 
-app.get("/api/notes/:noteid", function(req, res){
-  var chosen = req.params.noteid;
-  console.log(chosen);
+app.get("/api/notes/:id", function(req, res){
+  var chosen = req.params.id;
   for (let i = 0; i < db.length; i++) {
     if (chosen === db[i].id) {
+      console.log(chosen);
       return res.json(db[i]);
     }else 
       return res.json(false);
@@ -52,10 +52,11 @@ app.post("/api/notes", function(req, res){
 
 app.delete("/api/notes/:id", function(req, res){
   var id = req.params.id
-  for(let i = 0; i < db.length; i++) {
+  for(var i = 0; i < db.length; i++) {
+    console.log(db[i])
     if(id === db[i].id){
       delete db[i]
-      console.log(id + " deleted")
+      // res.status(204).send()
     }
   }
 })
