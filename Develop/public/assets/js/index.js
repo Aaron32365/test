@@ -16,8 +16,8 @@ var getNotes = function() {
 };
 
 // A function for saving a note to the db
-var saveNote = async function(note) {
-  return await $.ajax({
+var saveNote = function(note) {
+  return  $.ajax({
     url: "/api/notes",
     data: note,
     method: "POST"
@@ -112,7 +112,6 @@ var renderNoteList = function(notes) {
 
   for (var i = 0; i < notes.length; i++) {
     var note = notes[i];
-
     var $li = $("<li class='list-group-item'>").data(note);
     var $span = $("<span>").text(note.title);
     var $delBtn = $(
@@ -120,10 +119,12 @@ var renderNoteList = function(notes) {
     );
 
     $li.append($span, $delBtn);
-    noteListItems.push($li);
+    noteListItems.push($li);  
+  
   }
-
+  if(note !== {}){
   $noteList.append(noteListItems);
+  }
 };
 
 // Gets notes from the db and renders them to the sidebar
